@@ -1,3 +1,12 @@
+# GGJ Early Access
+
+Early Access from the Global Game Jam 2024
+
+stay tuned for updates:
+- Turn based Joke Combat
+- CP & TP Systems - Cringe or Tickle your enemies to reach victory!
+- Classic and Original jokes for a varied and hilarious game you can't put down
+
 # Top-Down Phaser Game with React UI Template
 
 This project is based on a Medium post: https://javascript.plainenglish.io/i-made-a-top-down-game-version-of-my-blog-with-phaser-and-react-faf5c28cf768
