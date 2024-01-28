@@ -9,6 +9,7 @@ import { getSelectorData } from '../../utils/utils';
 import { selectHeroSetters } from '../../zustand/hero/selectHeroData';
 import { selectMapSetters } from '../../zustand/map/selectMapData';
 import { selectMenuSetters } from '../../zustand/menu/selectMenu';
+import { selectDialogMessages, selectDialogSetters } from '../../zustand/dialog/selectDialog';
 
 export const scene = {};
 
@@ -46,7 +47,7 @@ export function create() {
         );
         setHeroInitialPosition({ x: 30, y: 42 });
         setHeroPreviousPosition({ x: 30, y: 42 });
-
+       
         changeScene(scene, 'GameScene', {
             // fonts: ['"Press Start 2P"'],
             atlases: ['hero'],

@@ -113,7 +113,7 @@ export async function create(initData) {
         scene.add.text(
             0,
             0,
-            '',
+            'GAME',
             {
                 fontFamily: font,
                 color: Display.Color.RGBToString(color.r, color.g, color.b, color.a),

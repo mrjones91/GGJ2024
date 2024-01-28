@@ -19,6 +19,7 @@ import {
     HERO_SPRITE_NAME,
     COIN_SPRITE_NAME,
     ENEMY_SPRITE_NAME,
+    ENEMY1_SPRITE_NAME,
     HEART_SPRITE_NAME,
     CRYSTAL_SPRITE_NAME,
     IDLE_FRAME_POSITION_KEY,
@@ -282,19 +283,41 @@ export const handleObjectsLayer = (scene) => {
 
             switch (gid || name) {
                 case ENEMY: {
-                    const spriteName = `${ENEMY_SPRITE_NAME}_${layerIndex}${objectIndex}`;
+                    const spriteName = `${ENEMY1_SPRITE_NAME}_${layerIndex}${objectIndex}`;
                     const enemy = scene.physics.add
-                        .sprite(x, y, ENEMY_SPRITE_NAME, IDLE_FRAME.replace(IDLE_FRAME_POSITION_KEY, DOWN_DIRECTION))
+                        .sprite(x, y, ENEMY1_SPRITE_NAME, IDLE_FRAME.replace(IDLE_FRAME_POSITION_KEY, DOWN_DIRECTION))
+                        .setName(spriteName)
+                        .setOrigin(0, 1)
+                        .setDepth(1);
+
+                    const enemy1 = scene.physics.add
+                        .sprite(x, y + 30, ENEMY_SPRITE_NAME, IDLE_FRAME.replace(IDLE_FRAME_POSITION_KEY, DOWN_DIRECTION))
                         .setName(spriteName)
                         .setOrigin(0, 1)
                         .setDepth(1);
 
                     enemy.body.setImmovable(true);
+                    enemy1.body.setImmovable(true);
                     scene.sprites.add(enemy);
                     scene.enemies.add(enemy);
+                    
+                    scene.sprites.add(enemy1);
+                    scene.enemies.add(enemy1);
 
                     enemy.setInteractive();
+
+                    enemy1.setInteractive();
+
                     enemy.on('pointerdown', () => {
+                        const { setTextTexts } = getSelectorData(selectTextSetters);
+                        setTextTexts([{
+                            key: 'game_title',
+                            variables: {},
+                            config: {},
+                        }]);
+                    });
+
+                    enemy1.on('pointerdown', () => {
                         const { setTextTexts } = getSelectorData(selectTextSetters);
                         setTextTexts([{
                             key: 'game_title',
@@ -314,14 +337,56 @@ export const handleObjectsLayer = (scene) => {
                                     setDialogCharacterName,
                                 } = getSelectorData(selectDialogSetters);
                                 const dialogMessages = getSelectorData(selectDialogMessages);
-
+                                
+                                console.log(dialogMessages);
+                                
                                 if (dialogMessages.length === 0) {
                                     enemyActionHeroCollider.active = false;
                                     setDialogCharacterName('monster');
                                     setDialogMessages([
-                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                                        'Praesent id neque sodales, feugiat tortor non, fringilla ex.',
-                                        'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur',
+                                        'Introduce yourself to my friend there and walk thru the door',
+                                    ]);
+                                    // setDialogCharacterName('DJ');
+                                    // setDialogMessages([
+                                    //     'Praesent id neque sodales, feugiat tortor non, fringilla ex.',
+                                    // ])
+                                    setDialogAction(() => {
+                                        // Do this to not trigger the message again
+                                        // Because whenever you call JustDown once, the second time
+                                        // you call it, it will be false
+                                        Input.Keyboard.JustDown(scene.actionKey);
+                                        setDialogCharacterName('');
+                                        setDialogMessages([]);
+                                        setDialogAction(null);
+                                    });
+
+                                    scene.time.delayedCall(0, () => {
+                                        enemyActionHeroCollider.active = true;
+                                    });
+                                }
+                            }
+                        }
+                    );
+
+                    const enemy1ActionHeroCollider = scene.physics.add.overlap(
+                        enemy1,
+                        scene.heroSprite.actionCollider,
+                        (e, a) => {
+                            if (Input.Keyboard.JustDown(scene.actionKey)) {
+                                const {
+                                    setDialogAction,
+                                    setDialogMessages,
+                                    setDialogCharacterName,
+                                } = getSelectorData(selectDialogSetters);
+                                const dialogMessages = getSelectorData(selectDialogMessages);
+
+                                if (dialogMessages.length === 0) {
+                                    enemyActionHeroCollider.active = false;
+                                    setDialogCharacterName('DJ');
+                                    setDialogMessages([
+                                        'Hi, Joke',
+                                        "I'm Dad",
+                                        "..."
                                     ]);
                                     setDialogAction(() => {
                                         // Do this to not trigger the message again
@@ -360,9 +425,9 @@ export const handleObjectsLayer = (scene) => {
                                 key: COIN_SPRITE_NAME,
                                 frame: `${COIN_SPRITE_NAME}_idle_${(index + 1).toString().padStart(2, '0')}`,
                             })),
-                            frameRate: 3,
+                            frameRate: 6,
                             repeat: -1,
-                            yoyo: false,
+                            yoyo: true,
                         });
                     }
 
@@ -436,6 +501,36 @@ export const handleObjectsLayer = (scene) => {
                         setHeroInitialPosition({ x: posX, y: posY });
                         setHeroPreviousPosition({ x: posX, y: posY });
 
+                        const {
+                            setDialogAction,
+                            setDialogMessages,
+                            setDialogCharacterName,
+                        } = getSelectorData(selectDialogSetters);
+                        const dialogMessages = getSelectorData(selectDialogMessages);
+                        setDialogCharacterName('GameMaster');
+                            setDialogMessages([
+                                'Knock Knock',
+                                'You',
+                                'YooHoo, You Win!',
+                            ]);
+                            // setDialogCharacterName('DJ');
+                            // setDialogMessages([
+                            //     'Praesent id neque sodales, feugiat tortor non, fringilla ex.',
+                            // ])
+                            setDialogAction(() => {
+                                // Do this to not trigger the message again
+                                // Because whenever you call JustDown once, the second time
+                                // you call it, it will be false
+                                Input.Keyboard.JustDown(scene.actionKey);
+                                setDialogCharacterName('');
+                                setDialogMessages([]);
+                                setDialogAction(null);
+                                changeScene(scene, 'BootScene', {
+                                    atlases: ['hero'],
+                                    images: [],
+                                    mapKey: map,
+                                });
+                            });
                         // scene.scene.restart();
                         changeScene(scene, 'GameScene', {
                             atlases: ['hero'],

@@ -10,6 +10,10 @@ export const OVERLAY_DIV_RESIZE_THRESHOLD = RE_RESIZE_THRESHOLD;
 
 export const HERO_SPRITE_NAME = 'hero';
 export const ENEMY_SPRITE_NAME = 'enemy';
+export const ENEMY1_SPRITE_NAME = 'enemy';
+export const ENEMY2_SPRITE_NAME = 'enemy';
+export const ENEMY3_SPRITE_NAME = 'enemy';
+export const ENEMY4_SPRITE_NAME = 'enemy';
 export const COIN_SPRITE_NAME = 'coin';
 export const HEART_SPRITE_NAME = 'heart';
 export const CRYSTAL_SPRITE_NAME = 'crystal';
